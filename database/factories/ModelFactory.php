@@ -20,3 +20,40 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'dj_id' => null,
     ];
 });
+
+$factory->define(App\DJ::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+        'visible' => true,
+    ];
+});
+
+$factory->define(App\Song::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->text,
+        'artist' => $faker->name,
+        'album' => $faker->text,
+        'tags' => $faker->words(10, true),
+        'usable' => $faker->boolean(),
+        'hash' => sha1(random_bytes(24)),
+        'path' => $faker->randomElement(['test.mp3', 'test.ogg', 'test.flac']),
+    ];
+});
+
+$factory->defineAs(App\Song::class, 'ogg', function () use ($factory) {
+    $song = $factory->raw(App\Song::class);
+
+    return array_merge($song, ['path' => 'test.ogg']);
+});
+
+$factory->defineAs(App\Song::class, 'mp3', function () use ($factory) {
+    $song = $factory->raw(App\Song::class);
+
+    return array_merge($song, ['path' => 'test.mp3']);
+});
+
+$factory->defineAs(App\Song::class, 'flac', function () use ($factory) {
+    $song = $factory->raw(App\Song::class);
+
+    return array_merge($song, ['path' => 'test.flac']);
+});
