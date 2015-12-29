@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 class Song extends Model
 {
+    use RevisionableTrait;
+
     /**
      * Years of this and we still haven't properly named tables, etc.
      *
