@@ -1,27 +1,41 @@
-## Laravel PHP Framework
+# r/a/dio - core
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Installing
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+You'll need PHP 7.0+, [Vagrant](https://vagrantup.com) and [Virtualbox](https://virtualbox.org) installed.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+1. Add `192.168.10.10 radio.app` to your hosts file.
+2. `cp .env.example .env` (change values as needed)
+3. `composer install` in the repo root
+4. Optional step: `php vendor/bin/homestead make` to correct paths in Homestead.yaml
+5. `vagrant up` and go play games for a bit
+6. `vagrant ssh` to get into the VM.
 
-## Official Documentation
+If you want to develop locally you'll need redis, php7, elasticsearch, postgres (or mysql, postgres is preferred) and a webserver.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+## Creating + Migrating the database
 
-## Contributing
+`php artisan migrate --seed`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+To drop and re-seed the database, `php artisan migrate:refresh --seed`
 
-## Security Vulnerabilities
+## Building Assets
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Literally just run `gulp` from the repo root.
+All files in `resources/assets/js` are browserified, so ECMAScript 2015 + ES7 are both available. There's also NPM modules available, too.
+
+## Index management
+
+You can explore all of the r/a/dio search index under the `index` namespace:
+
+    php artisan list --name=index
+
+    index:build
+    index:search
+    index:drop
+    index:update
+    index:add
 
 ### License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+R/a/dio core is licensed under the [MIT license](http://opensource.org/licenses/MIT)
