@@ -1,7 +1,8 @@
 /vendor
 /node_modules
 /.idea
-Homestead.yaml
+/.vagrant
 Homestead.json
 .env
-
+.phpstorm.meta.php
+_ide_helper.php

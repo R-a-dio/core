@@ -1,0 +1,24 @@
+---
+ip: 192.168.10.10
+memory: 1024
+box: laravel/homestead-7
+cpus: 2
+hostname: core
+name: core
+provider: virtualbox
+
+authorize: ~/.ssh/id_rsa.pub
+
+keys:
+    - ~/.ssh/id_rsa
+
+folders:
+    - map: ~/dev/radio/core
+      to: /home/vagrant/core
+
+sites:
+    - map: radio.app
+      to: /home/vagrant/core/public
+
+databases:
+    - homestead
