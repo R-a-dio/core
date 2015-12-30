@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function dj()
     {
-        return $this->belongsTo(DJ::class);
+        return $this->belongsTo(DJ::class, 'djid');
     }
 }

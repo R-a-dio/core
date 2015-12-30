@@ -18,7 +18,7 @@ class CreateDjsTable extends Migration
             $table->string('djname');
             $table->string('djimage')->nullable();
             $table->boolean('visible')->default(false);
-            $table->integer('priority');
+            $table->integer('priority')->default(0);
 
             $table->timestamps();
         });

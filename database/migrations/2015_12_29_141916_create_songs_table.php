@@ -15,7 +15,7 @@ class CreateSongsTable extends Migration
         Schema::create('tracks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('hash')->unique(); // metadata hash
-            $table->integer('acceptor_id');
+            $table->integer('acceptor_id')->nullable();
 
             // metadata
             $table->string('artist');
@@ -24,18 +24,20 @@ class CreateSongsTable extends Migration
             $table->string('path');
             $table->string('tags')->index();
 
-            $table->integer('requestcount')->default(0);
-            $table->integer('priority')->default(0);
+            $table->integer('requestcount')->nullable()->default(0);
+            $table->integer('priority')->nullable()->default(0);
 
-            $table->boolean('usable')->default(false)->index();
+            $table->boolean('usable')->default(false);
             $table->boolean('need_reupload')->default(false);
             $table->timestamp('lastplayed')->nullable();
             $table->timestamp('lastrequested')->nullable();
             $table->timestamps();
 
             // legacy, need removing at a later date
-            $table->string('accepter');
-            $table->string('lasteditor');
+            $table->string('accepter')->default('');
+            $table->string('lasteditor')->default('');
+
+            $table->index(['usable', 'status', 'acceptor_id']);
         });
     }
 
@@ -46,6 +48,6 @@ class CreateSongsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('songs');
+        Schema::drop('tracks');
     }
 }
