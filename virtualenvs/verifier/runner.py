@@ -36,103 +36,128 @@ import argparse
 import uuid
 import sys
 
-NODE=20491574538233 # python 2 doesn't have int.from_bytes, so this is a
-                    # hardcoded 48-bit int with the 8th bit set per RFC4122
-
 CHOICES = ['mp3', 'flac']
 ENCODERS = {
     "mp3": "lame --noreplaygain --silent --resample 44.1 -m j --preset cbr 192 -q 0 {filein} {fileout}",
     "flac": "flac -o {fileout} {filein}"
 }
 
-def path(filename):
-    file = os.path.abspath(args.file)
+class Verifier(object):
+    def __init__(self, node, formats, encoders, args):
+        self.node = node
+        self.formats = formats
+        self.filename = self.get_path(args.filename)
+        self.format = self.get_format(args)
+        self.command = encoders[self.format]
 
-    if not os.path.exists(file):
-        error("file doesn't exist")
+    def get_path(self, filename):
+        filename = os.path.abspath(filename)
 
-    return file
+        if not os.path.exists(filename):
+            self.error("file doesn't exist")
 
-def format(fmt):
-    if fmt is None:
-        _, fmt = os.path.splitext(args.file).replace('.', '')
-        if not fmt in CHOICES:
-            error("{0} is an unsupported file format".format(fmt))
-    else:
-        format = args.format
+        return filename
 
-    return fmt
+    def get_format(self, args):
+        if args.format is None:
+            _, fmt = os.path.splitext(args.filename)
+            fmt = fmt.replace('.', '')
 
-def error(message, status="fail"):
-    print json.dumps({"error": message, "status": status})
-    sys.exit(1)
+            if not fmt in self.formats:
+                self.error("{0} is an unsupported file format".format(fmt))
+        else:
+            fmt = args.format
 
-def rename(src, dst):
-    try:
-        shutil.move(src, dst)
-    except (IOError, shutil.Error) as err:
-        error("failed to rename {0} to {1}".format(src, dst))
+        return fmt
 
-def encode():
-    command = ENCODERS[args.format]
-    id = str(uuid.uuid1(NODE))
-    temp_file = "/tmp/verifying-{id}.{ext}".format(ext=args.format, id=id)
-    command = command.format(filein=args.file, fileout=temp_file).split(" ")
-    try:
+    def rename(self, src, dst):
+        try:
+            shutil.move(src, dst)
+        except (IOError, shutil.Error) as err:
+            self.error("failed to rename {0} to {1}".format(src, dst))
+
+    def run_encode(self, filein, fileout):
+        command = self.command.format(filein=filein, fileout=fileout).split(" ")
         subprocess.call(command)
-    except:
-        error("failed to encode")
 
-    try:
-        verify(temp_file)
-    except:
-        os.remove(temp_file)
-        error("re-encoding the file failed", "fail")
+    def encode(self):
+        file_id = self.uuid()
+        filename = "/tmp/{id}.{ext}".format(ext=self.format, id=self.uuid())
 
-    new = new_path(id)
-    rename(temp_file, new)
+        # let's encode it
+        try:
+            self.run_encode(self.filename, filename)
+        except:
+            self.error("failed to encode")
 
-    return new
+        # now we have a file, let's verify that one
+        try:
+            self.verify(temp_file)
+        except:
+            os.remove(temp_file)
+            error("re-encoding the file failed")
 
-def new_path(id):
-    return os.path.join(os.path.dirname(args.file), '{0}.{1}'.format(id, args.format))
+        # and rename it and we're good
+        new = self.new_path(file_id)
+        self.rename(filename, new)
 
-def verify(filename):
-    audio = audiotools.open(filename)
+        return new
 
-    # Do verification with audiotools; this might be too strict
-    audio.verify()
+    def uuid(self):
+        return str(uuid.uuid1(self.node))
+
+    def new_path(self, filename):
+        return os.path.join(os.path.dirname(self.filename),
+                            '{0}.{1}'.format(filename, self.format))
+
+    def verify(self, filename=None):
+        if not filename:
+            filename = self.filename
+
+        audio = audiotools.open(filename)
+
+        # Do verification with audiotools; this might be too strict
+        audio.verify()
+
+    def error(self, message, status="fail"):
+        print json.dumps({"error": message, "status": status})
+        sys.exit(1)
+
+    def check_file(self):
+        try:
+            self.verify()
+        except (audiotools.InvalidFile, audiotools.UnsupportedFile, ValueError):
+            # We failed to open it in audiotools, so the streamer
+            # won't be able to play it; try re-encoding for good measure.
+            try:
+                filename = self.encode()
+            except VerifyError:
+                error("failed to encode the song")
+            except:
+                error("unknown error on {0}".format(self.filename))
+
+
+            fileobj = audiotools.open(filename)
+            length = long(fileobj.seconds_length())
+            # If there was no error we now have two files, delete the old one
+            os.remove(args.file)
+        else:
+            filename = self.new_path(self.uuid())
+            self.rename(self.filename, filename)
+            fileobj = audiotools.open(filename)
+            length = long(fileobj.seconds_length())
+
+        print json.dumps({"length": length, "success": True, "filename": filename})
+        sys.exit(0)
 
 def main():
     parser = argparse.ArgumentParser(description='Verify songs can be played by the streamer')
-    parser.add_argument('file', type=path, help='the filename of the input')
-    parser.add_argument('--format', type=format, choices=CHOICES, help='the format of the file (default: guess)')
+    parser.add_argument('filename', help='the filename of the input')
+    parser.add_argument('--format', choices=CHOICES, help='the format of the file (default: guess)')
     args = parser.parse_args()
 
-    try:
-        verify(args.file)
-    except (audiotools.InvalidFile, audiotools.UnsupportedFile, ValueError):
-        # We failed to open it in audiotools, so the streamer
-        # won't be able to play it; try re-encoding for good measure.
-        try:
-            filename = encode()
-        except VerifyError:
-            error("failed to encode the song")
-        except Error as e:
-            error("unknown error on {0}".format(args.file))
-
-
-        fileobj = audiotools.open(filename)
-        length = long(fileobj.seconds_length())
-        # If there was no error we now have two files, delete the old one
-        os.remove(args.file)
-    else:
-        filename = new_path(str(uuid.uuid1(NODE)))
-        rename(args.file, filename)
-        length = long(fileobj.seconds_length())
-
-    json.dumps({"length": length, "success": true, "filename": filename})
-    sys.exit(0)
+    verifier = Verifier(20491574538233, CHOICES, ENCODERS, args)
+    verifier.check_file()
 
 if __name__ == "__main__":
     main()
