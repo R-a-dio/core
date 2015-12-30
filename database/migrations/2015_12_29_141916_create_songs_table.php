@@ -16,6 +16,7 @@ class CreateSongsTable extends Migration
             $table->increments('id');
             $table->string('hash')->unique(); // metadata hash
             $table->integer('acceptor_id')->nullable();
+            $table->enum('status', ['pending', 'accepted'])->default('pending');
 
             // metadata
             $table->string('artist');
