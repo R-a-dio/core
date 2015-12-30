@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "40b62d59d871e852b7166e2bcf8a667b",
-    "content-hash": "5f4d7d3de4f9f3a42e6cfd92e2c3e813",
+    "hash": "16f0527ecfb2711e04f6c391474b95c6",
+    "content-hash": "49866a7691fad10c167dc7d90140073d",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2208,16 +2208,16 @@
         },
         {
             "name": "laracasts/generators",
-            "version": "1.1.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laracasts/Laravel-5-Generators-Extended.git",
-                "reference": "eb58b86f49d69eff4db4cc6f2ec94480a57c4358"
+                "url": "https://github.com/R-a-dio/Laravel-5-Generators-Extended.git",
+                "reference": "8f0d535a72c98a70b1738b4f621d564efc65787e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laracasts/Laravel-5-Generators-Extended/zipball/eb58b86f49d69eff4db4cc6f2ec94480a57c4358",
-                "reference": "eb58b86f49d69eff4db4cc6f2ec94480a57c4358",
+                "url": "https://api.github.com/repos/R-a-dio/Laravel-5-Generators-Extended/zipball/8f0d535a72c98a70b1738b4f621d564efc65787e",
+                "reference": "8f0d535a72c98a70b1738b4f621d564efc65787e",
                 "shasum": ""
             },
             "require": {
@@ -2233,7 +2233,6 @@
                     "Laracasts\\Generators\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2248,7 +2247,10 @@
                 "generators",
                 "laravel"
             ],
-            "time": "2015-08-19 14:29:06"
+            "support": {
+                "source": "https://github.com/R-a-dio/Laravel-5-Generators-Extended/tree/master"
+            },
+            "time": "2015-12-30 22:15:11"
         },
         {
             "name": "laravel/homestead",
@@ -3423,12 +3425,13 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "laracasts/generators": 20,
         "laravel/homestead": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0   "
+        "php": ">=7.0"
     },
     "platform-dev": []
 }

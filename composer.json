@@ -4,6 +4,12 @@
     "keywords": ["music", "streaming"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/R-a-dio/Laravel-5-Generators-Extended"
+        }
+    ],
     "require": {
         "php": ">=7.0",
         "laravel/framework": "5.2.*",
@@ -18,7 +24,7 @@
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*",
         "barryvdh/laravel-ide-helper": "^2.1",
-        "laracasts/generators": "^1.1",
+        "laracasts/generators": "dev-master",
         "laravel/homestead": "^3.0-dev"
     },
     "autoload": {
