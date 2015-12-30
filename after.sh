@@ -7,11 +7,11 @@ apt-get install -y python-pip python-dev lame flac mpg123
 
 # upgrade pip because ouch
 curl -sS https://bootstrap.pypa.io/get-pip.py | python
-pip install -U virtualenv
+pip install -U virtualenv ndg-httpsclient
 
 function install() {
-  local env=$0
-  cd "${DIR}/virtualenvs/${env}"
+  local virtualenv=$1
+  cd "${DIR}/virtualenvs/${virtualenv}"
   virtualenv .
   source bin/activate
   python setup.py install
