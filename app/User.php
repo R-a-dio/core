@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\AliasedFields;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
