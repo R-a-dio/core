@@ -7,18 +7,17 @@ apt-get install -y python-pip python-dev lame flac mpg123
 
 # upgrade pip because ouch
 curl -sS https://bootstrap.pypa.io/get-pip.py | python
-
 pip install -U virtualenv
 
-# simplify everything else
-cd "${DIR}/verifier"
+function install() {
+  local env=$0
+  cd "${DIR}/virtualenvs/${env}"
+  virtualenv .
+  source bin/activate
+  python setup.py install
+  deactivate
+}
 
-# get a virtualenv up in here
-virtualenv .
-source bin/activate
-
-# update the ancient, dusty version of pip that comes with this
-pip install -U pip setuptools
-
-# install the verifier into the virtualenv
-python setup.py install
+# go through each virtualenv and set them up
+install verifier
+#install hanyuu
