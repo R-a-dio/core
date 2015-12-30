@@ -1,11 +1,11 @@
 ---
-ip: 192.168.10.10
+ip: "192.168.10.10"
 memory: 1024
-box: laravel/homestead-7
 cpus: 2
-hostname: core
-name: core
+hostname: radio
+name: radio
 provider: virtualbox
+box: laravel/homestead-7
 
 authorize: ~/.ssh/id_rsa.pub
 
@@ -13,12 +13,12 @@ keys:
     - ~/.ssh/id_rsa
 
 folders:
-    - map: ~/dev/radio/core
-      to: /home/vagrant/core
+    - map: ~/Code
+      to: "/home/vagrant/radio"
 
 sites:
     - map: radio.app
-      to: /home/vagrant/core/public
+      to: "/home/vagrant/radio/public"
 
 databases:
     - homestead

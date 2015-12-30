@@ -25,10 +25,6 @@ from setuptools import setup
 
 VERSION='1.0.0'
 
-requirements = [
-    'git+https://github.com/R-a-dio/python-audio-tools#master'
-]
-
 setup(
     name='verifier',
     version=VERSION,
@@ -37,12 +33,13 @@ setup(
     url='https://r-a-d.io',
     description='',
     long_description='',
-    zip_safe=False,
     license='MIT',
-    include_package_data=True,
+    package_dir={'verifier': ''},
+    packages=['verifier'],
     entry_points={
         'console_scripts': [
             'verifier = verifier.runner:main',
         ],
     },
+    dependency_links=['git+https://github.com/R-a-dio/python-audio-tools@master#egg=audiotools']
 )

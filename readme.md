@@ -2,12 +2,12 @@
 
 ## Installing
 
-You'll need PHP 7.0+, [Vagrant](https://vagrantup.com) and [Virtualbox](https://virtualbox.org) installed.
+You'll need PHP 7.0+, [Vagrant (latest)](https://vagrantup.com) and [Virtualbox 5.0+](https://virtualbox.org) installed.
 
 1. Add `192.168.10.10 radio.app` to your hosts file.
 2. `cp .env.example .env` (change values as needed)
 3. `composer install` in the repo root
-4. Optional step: `php vendor/bin/homestead make` to correct paths in Homestead.yaml
+4. `php vendor/bin/homestead make` to correct paths in Homestead.yaml
 5. `vagrant up` and go play games for a bit
 6. `vagrant ssh` to get into the VM.
 
