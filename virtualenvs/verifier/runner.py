@@ -122,16 +122,16 @@ def main():
             error("unknown error on {0}".format(args.file))
 
 
+        fileobj = audiotools.open(filename)
+        length = long(fileobj.seconds_length())
         # If there was no error we now have two files, delete the old one
         os.remove(args.file)
-
-        fileobj = audiotools.open(song.new)
-        length = long(fileobj.seconds_length())
     else:
-        rename(args.file, new_path(uuid.uuid1(NODE)))
+        filename = new_path(str(uuid.uuid1(NODE)))
+        rename(args.file, filename)
         length = long(fileobj.seconds_length())
 
-    json.dumps({"length": length, "success": true})
+    json.dumps({"length": length, "success": true, "filename": filename})
     sys.exit(0)
 
 if __name__ == "__main__":
