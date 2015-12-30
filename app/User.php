@@ -47,6 +47,13 @@ class User extends Authenticatable
         'admin' => 'boolean',
     ];
 
+    /**
+     * The DJ associated with this user.
+     *
+     * It should be a HasOne relationship; blame Vin.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function dj()
     {
         return $this->belongsTo(DJ::class, 'djid');
