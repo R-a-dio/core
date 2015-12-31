@@ -36,11 +36,11 @@ setup(
     license='MIT',
     package_dir={'verifier': ''},
     packages=['verifier'],
-    install_requires=['Python_Audio_Tools'],
+    install_requires=['python-audio-tools'],
     entry_points={
         'console_scripts': [
             'verifier = verifier.runner:main',
         ],
     },
-    dependency_links=['git+https://github.com/R-a-dio/python-audio-tools@master#egg=Python_Audio_Tools']
+    dependency_links=['git+https://github.com/R-a-dio/python-audio-tools@master#egg=python-audio-tools']
 )
