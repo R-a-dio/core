@@ -1,0 +1,9 @@
+[submodule "components/verifier"]
+	path = components/verifier
+	url = https://github.com/R-a-dio/verifier
+[submodule "components/hanyuu"]
+	path = components/hanyuu
+	url = https://github.com/R-a-dio/Hanyuu-sama
+[submodule "components/loadbalancer"]
+	path = components/loadbalancer
+	url = https://github.com/R-a-dio/loadbalancer
