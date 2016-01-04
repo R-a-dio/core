@@ -1,6 +1,6 @@
 ---
 ip: "192.168.10.10"
-memory: 1024
+memory: 2048
 cpus: 2
 hostname: radio
 name: radio

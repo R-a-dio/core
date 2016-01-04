@@ -12,11 +12,11 @@ echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" >> /e
 
 # add dependencies for python packages
 apt-get update
-apt-get install -y ezstream elasticsearch icecast2 python-dev lame flac mpg123 libmysqlclient-dev libshout3-dev
+DEBIAN_FRONTEND=noninteractive apt-get install -y ezstream elasticsearch icecast2 python-dev lame flac mpg123 libmysqlclient-dev libshout3-dev libffi-dev
 
 # upgrade pip because ouch
 curl -sS https://bootstrap.pypa.io/get-pip.py | python
-pip install -U virtualenv ndg-httpsclient
+pip install -U ndg-httpsclient virtualenv
 
 function install-virtualenv() {
   local virtualenv=$1
